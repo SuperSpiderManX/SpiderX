@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>{{title}}</title>
+</head>
+<body>
+{% if tmac and user %}
+    <li>name : {{user.name}}</li>
+    {% for k,v in users.items %}
+        <li> {{forloop.counter}}    {{k}}:{{v}}    {{forloop.counter0}}</li>
+    {% empty %}
+        <li>Sorry, no athlete in this list!</li>
+    {% endfor %}
+{% elif user.name == "tom11" %}
+    <li>name eq : {{user.name}}</li>
+{% elif not user.sex %}
+    <li>not sex: {{user.sex}}</li>
+{% elif user.sex111 or user.age111 %}
+    <li>sex: {{user.sex}} or age: {{user.age}}</li>
+{% elif "tom" in user.age %}
+    <li>tom in : {{user.name}}</li>
+{% elif "tom" in user.name and user.sex == 24 or user.sex == "male" %}
+    <li>and or ok</li>
+{% else %}
+用户不存在
+{% endif %}
+
+{% for book in book_list %}
+    <li> {{book}}</li>
+{% endfor %}
+
+{% for k,v in users.items %}
+    <li> {{forloop.counter}}    {{k}}:{{v}}    {{forloop.counter0}}</li>
+{% empty %}
+    <li>Sorry, no athlete in this list!</li>
+{% endfor %}
+
+
+hello {{uname}}
+</body>
+</html>
