@@ -55,19 +55,19 @@ def loginVerify(req):
 
 def shell(req):
     if req.method == 'GET':
-            fromuser = req.COOKIES.get('username','')
             #fromuser = req.GET['fromuser']
             username = req.GET['username']
             password = req.GET['password']
             ip = req.GET['ip']
             port = req.GET['port']
             audit = req.GET['audit']
-            print fromuser,username,password,ip,port,audit
+            #print fromuser,username,password,ip,port,audit
+            fromuser = req.COOKIES.get('username','')
             tempfile = open("/tmp/shellinfo.txt",'w')
             tempfile.write("%s %s %s %s %s" %(fromuser,username,ip,port,audit))
             tempfile.close()
             user = User.objects.filter(username__exact = username,password__exact = password)
-            if user:
+            if 1:
                 return HttpResponseRedirect('https://192.168.0.15:8080/tmac/')
             else:
                 return HttpResponse('failed')
