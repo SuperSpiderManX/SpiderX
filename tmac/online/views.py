@@ -55,7 +55,8 @@ def loginVerify(req):
 
 def shell(req):
     if req.method == 'GET':
-            fromuser = req.GET['fromuser']
+            fromuser = req.COOKIES.get('username','')
+            #fromuser = req.GET['fromuser']
             username = req.GET['username']
             password = req.GET['password']
             ip = req.GET['ip']
