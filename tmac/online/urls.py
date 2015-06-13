@@ -8,5 +8,6 @@ urlpatterns = patterns('',
     url(r'^index/$',views.index,name = 'index'),
     url(r'^logout/$',views.logout,name = 'logout'),
     url(r'^loginVerify/$',views.loginVerify,name = 'loginVerify'),
+    url(r'^shell/$',views.shell,name = 'shell'),
     url(r'^assetList/$',views.assetList,name = 'assetList'),
 )

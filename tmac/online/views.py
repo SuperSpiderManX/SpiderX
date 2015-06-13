@@ -53,6 +53,27 @@ def loginVerify(req):
         uf = UserForm()
     return render_to_response('login.html',{'uf':uf},context_instance=RequestContext(req))
 
+def shell(req):
+    if req.method == 'GET':
+            fromuser = req.GET['fromuser']
+            username = req.GET['username']
+            password = req.GET['password']
+            ip = req.GET['ip']
+            port = req.GET['port']
+            audit = req.GET['audit']
+            print fromuser,username,password,ip,port,audit
+            tempfile = open("/tmp/shellinfo.txt",'w')
+            tempfile.write("%s %s %s %s %s" %(fromuser,username,ip,port,audit))
+            tempfile.close()
+            user = User.objects.filter(username__exact = username,password__exact = password)
+            if user:
+                return HttpResponseRedirect('https://192.168.0.15:8080/tmac/')
+            else:
+                return HttpResponse('failed')
+    else:
+        uf = UserForm()
+    return render_to_response('login.html',{'uf':uf},context_instance=RequestContext(req))
+
 def index(req):
     username = req.COOKIES.get('username','')
     return render_to_response('index.html' ,{'username':username})
