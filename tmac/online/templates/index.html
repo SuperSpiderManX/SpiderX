@@ -8,6 +8,9 @@
 
 <body>
 <h1>welcome {{username}} !</h1>
+{% for emp in allmachine %}
+<div>{{emp}}</div>
+{% endfor %}
 <br>
 <a href="http://192.168.0.15:8000/online/logout/">退出</a>
 </body>

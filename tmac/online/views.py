@@ -55,7 +55,10 @@ def loginVerify(req):
 
 def index(req):
     username = req.COOKIES.get('username','')
-    return render_to_response('index.html' ,{'username':username})
+    usergroup = User.objects.get(username='xjt').group_set.all()
+    allmachine = Group.objects.get(groupname='admin').machine_set.all()
+    print allmachine
+    return render_to_response('index.html' ,{'username':username,'allmachine':allmachine})
 
 def logout(req):
     response = HttpResponse('logout !!')
