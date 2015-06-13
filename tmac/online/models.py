@@ -24,4 +24,4 @@ class Machine(models.Model):
 	group = models.ManyToManyField(Group)
 
 	def __unicode__(self):
-		return self.name
+		return u'%s %s %s %s %s %s' % (self.name, self.ip, self.port, self.loginuser, self.loginpassword )

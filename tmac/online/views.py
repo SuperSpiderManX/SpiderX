@@ -55,10 +55,42 @@ def loginVerify(req):
 
 def index(req):
     username = req.COOKIES.get('username','')
+    return render_to_response('index.html' ,{'username':username})
+
+
+class ServerInfo:
+    def __init__(self):
+        self.ip = ""
+        self.port = ""
+        self.serverName = ""
+        self.groupName = ""
+        self.comment = ""
+        self.serverId = 0
+
+def assetList(req):
+    viewPage = "1"
+    serverInfoList = []
+    username = req.COOKIES.get('username','')
     usergroup = User.objects.get(username='xjt').group_set.all()
     allmachine = Group.objects.get(groupname='admin').machine_set.all()
-    print allmachine
-    return render_to_response('index.html' ,{'username':username,'allmachine':allmachine})
+    
+    for i in allmachine:
+        appendObj = ServerInfo()
+        appendObj.serverName = i.name
+        appendObj.ip = i.ip
+        appendObj.port = i.port
+        appendObj.user = i.loginuser
+        appendObj.password = i.loginpassword
+        appendObj.comment = ""
+        
+        serverInfoList.append(appendObj)
+        print serverInfoList
+        
+    pageViewIndex = viewPage
+    
+    return render_to_response('assetList.html',{'serverInfoList':serverInfoList,"pageViewIndex":pageViewIndex})
+
+
 
 def logout(req):
     response = HttpResponse('logout !!')
