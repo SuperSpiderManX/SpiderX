@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+
+<html>
+<script>
+    function clicke() {
+
+        var usernmae = document.all['username'].value
+        var password = document.all['password'].value
+        var url = "http://www.spiderx12345.com:8080/spider/loginVerify?username=" + usernmae + "&password=" + password
+        send_request("GET", url, null, "TEXT", processTextResponse);
+    }
+
+    var http_request = false;
+    //定义可复用的http请求发送函数
+
+    function send_request(method, url, content, responseType, callback) {//初始化、指定处理函数、发送请求的函数
+
+        http_request = false;
+        //开始初始化XMLHttpRequest对象
+
+        if (window.XMLHttpRequest) { //Mozilla 浏览器
+
+            http_request = new XMLHttpRequest();
+            if (http_request.overrideMimeType) {//设置MiME类别
+
+                http_request.overrideMimeType("text/xml");
+            }
+
+        }
+        else if (window.ActiveXObject) { // IE浏览器
+
+            try {
+                http_request = new ActiveXObject("Msxml2.XMLHTTP");
+            } catch (e) {
+                try {
+                    http_request = new ActiveXObject("Microsoft.XMLHTTP");
+                } catch (e) { }
+            }
+        }
+
+        if (!http_request) { // 异常，创建对象实例失败
+
+            window.alert("不能创建XMLHttpRequest对象实例.");
+            return false;
+        }
+        if (responseType.toLowerCase() == "text") {
+            //http_request.onreadystatechange = processTextResponse;
+
+            http_request.onreadystatechange = callback;
+        }
+        else if (responseType.toLowerCase() == "xml") {
+            //http_request.onreadystatechange = processXMLResponse;
+
+            http_request.onreadystatechange = callback;
+            window.alert("响应类别参数错误。");
+            return false;
+        }
+        // 确定发送请求的方式和URL以及是否异步执行下段代码
+
+        if (method.toLowerCase() == "get") {
+            http_request.open(method, url, true);
+        }
+
+        else if (method.toLowerCase() == "post") {
+            http_request.open(method, url, true);
+            http_request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            http_request.setRequestHeader("Accept-Language", "zh-cn");
+        }
+        else {
+            window.alert("http请求类别参数错误。");
+            return false;
+        }
+        http_request.send(content);
+    }
+    // 处理返回文本格式信息的函数
+
+    function processTextResponse() {
+        //var element = document.getElementById("main");
+        if (http_request.readyState == 4) {
+            if (http_request.status == 200) {
+                //window.location.href = 'http://www.baidu.com'
+                window.location.href = "http://www.spiderX12345.com:8080/spider/assetList?page=1"
+                //alert(http_request.responseText);
+
+            } else {
+                alert(http_request.status);
+
+                alert("您所请求的页面有异常。");
+
+            }
+        }
+        else {
+            //timervar p = document.getElementById("progress");
+
+            //p.innerText = "完成";
+
+        }
+    }
+</script>
+
+    <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title> 登录 | SpiderX</title>
+        <link href="/spider/static/style2.css" rel="stylesheet">
+    </head>
+
+    <body class="gray-bg">
+        <center>
+            <div class="middle-box text-center loginscreen  animated fadeInDown">
+                <div>
+                    <div>
+                        <h1 class="logo-name"><img src="/spider/static/logo.jpg"></h1>
+                    </div>
+
+                    <h2>欢迎使用SpiderX</h2>
+                    <input type="text" name="username" class="form-control" placeholder="Username">
+                    <input type="password" name="password" placeholder="Password" required="">
+                    <button type="submit" onclick="clicke()" class="btn btn-primary block full-width m-b">登录</button>
+                    <a href="D:\SpiderXServer\spider\templates"></a>
+</div>
+            </div>
+            </center>
+</body></html>

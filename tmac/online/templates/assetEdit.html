@@ -1,0 +1,691 @@
+﻿<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>SpiderX</title>
+</head>
+
+<script>
+    function addLoadEvent(func)
+    { 
+        var oldonload = window.onload; 
+        if (typeof window.onload != 'function')
+        {  window.onload = func;  
+        }  
+        else 
+        {   
+            window.onload = function()
+            {    
+                oldonload();    
+                func();    
+            }   
+        } 
+    }
+    
+    function loadControl()
+    {
+    }
+
+    addLoadEvent(loadControl);
+
+
+    function clickServerManage() {
+        window.location.href = "http://www.spiderX12345.com:8080/spider/assetList?page=1"
+    }
+
+    var http_request = false;
+    //定义可复用的http请求发送函数
+
+    function send_request(method, url, content, responseType, callback) {//初始化、指定处理函数、发送请求的函数
+
+        http_request = false;
+        //开始初始化XMLHttpRequest对象
+
+        if (window.XMLHttpRequest) { //Mozilla 浏览器
+
+            http_request = new XMLHttpRequest();
+            if (http_request.overrideMimeType) {//设置MiME类别
+
+                http_request.overrideMimeType("text/xml");
+            }
+
+        }
+        else if (window.ActiveXObject) { // IE浏览器
+
+            try {
+                http_request = new ActiveXObject("Msxml2.XMLHTTP");
+            } catch (e) {
+                try {
+                    http_request = new ActiveXObject("Microsoft.XMLHTTP");
+                } catch (e) { }
+            }
+        }
+
+        if (!http_request) { // 异常，创建对象实例失败
+
+            window.alert("不能创建XMLHttpRequest对象实例.");
+            return false;
+        }
+        if (responseType.toLowerCase() == "text") {
+            //http_request.onreadystatechange = processTextResponse;
+
+            http_request.onreadystatechange = callback;
+        }
+        else if (responseType.toLowerCase() == "xml") {
+            //http_request.onreadystatechange = processXMLResponse;
+
+            http_request.onreadystatechange = callback;
+            window.alert("响应类别参数错误。");
+            return false;
+        }
+        // 确定发送请求的方式和URL以及是否异步执行下段代码
+
+        if (method.toLowerCase() == "get") {
+            http_request.open(method, url, true);
+        }
+
+        else if (method.toLowerCase() == "post") {
+            http_request.open(method, url, true);
+            http_request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            http_request.setRequestHeader("Accept-Language", "zh-cn");
+        }
+        else {
+            window.alert("http请求类别参数错误。");
+            return false;
+        }
+        http_request.send(content);
+    }
+    // 处理返回文本格式信息的函数
+
+    function processTextResponse() {
+        //var element = document.getElementById("main");
+        if (http_request.readyState == 4) {
+            if (http_request.status == 200) {
+                //window.location.href = 'http://www.baidu.com'
+                window.location.href = "http://www.spiderX12345.com:8080/spider/manageServer"
+                //alert(http_request.responseText);
+
+            } else {
+                alert(http_request.status);
+
+                alert("您所请求的页面有异常。");
+
+            }
+        }
+        else {
+            //timervar p = document.getElementById("progress");
+
+            //p.innerText = "完成";
+
+        }
+    }
+</script>
+
+<body class="gray-bg">
+    <div class="middle-box text-center loginscreen  animated fadeInDown">
+        <div>
+            <div style="margin-top: 150px; margin-left: 20px;">
+                <button type="submit" onclick="clickServerManage()" class="btn btn-primary block full-width m-b">服务器管理</button>
+                </br>
+                <button type="submit" onclick="clickUserManage()" class="btn btn-primary block full-width m-b">用户管理</button>
+                </br>
+                <button type="submit" onclick="clickGroupManage()" class="btn btn-primary block full-width m-b">组管理</button>
+            </div>
+
+        </div>
+    </div>
+
+    <form id="assetForm" method="post" class="form-horizontal" autocomplete="off">
+        <div class="form-group">
+            <label class="col-sm-2 control-label"> IP地址<span class="red-fonts">*</span> </label>
+            <div class="col-sm-8"><input type="text" name="j_ip" value="192.168.5.13" placeholder="192.168.1.1" class="form-control"></div>
+        </div>
+
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"> 端口号<span class="red-fonts">*</span> </label>
+            <div class="col-sm-8"><input type="text" placeholder="22" name="j_port" value="22" class="form-control"></div>
+        </div>
+
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"> 登录方式<span class="red-fonts">*</span> </label>
+            <div class="col-sm-8">
+
+
+                <div class="radio i-checks"><label> <input type="radio" value="M" name="j_type" onclick="show(this)"> <i> MAP </i></label></div>
+
+
+
+                <div class="radio i-checks"><label> <input type="radio" checked="" value="L" name="j_type" onclick="show(this)"> <i> LDAP </i></label></div>
+
+
+            </div>
+
+
+        </div>
+
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+            <label for="j_idc" class="col-lg-2 control-label"> 所属IDC<span class="red-fonts">*</span> </label>
+            <div class="col-sm-8">
+                <select id="j_idc" name="j_idc" class="form-control m-b">
+
+
+                    <option value="1" selected> 默认 </option>
+
+
+                </select>
+            </div>
+        </div>
+
+
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+            <label for="j_dept" class="col-lg-2 control-label">所属部门<span class="red-fonts">*</span></label>
+            <div class="col-sm-8">
+                <select id="j_dept" name="j_dept" class="form-control m-b" multiple size="10">
+
+
+                    <option type="checkbox" value="1">超管部  --- 超级管理部门 </option>
+
+
+
+                    <option type="checkbox" value="2">默认  --- 默认部门 </option>
+
+
+
+                    <option type="checkbox" value="104">为二位  --- 玩儿 </option>
+
+
+
+                    <option type="checkbox" value="11">DEPT9  --- DEPT9 </option>
+
+
+
+                    <option type="checkbox" value="105">ibus </option>
+
+
+
+                    <option type="checkbox" value="13">DEPT11  --- DEPT11 </option>
+
+
+
+                    <option type="checkbox" value="15">DEPT13  --- DEPT13 </option>
+
+
+
+                    <option type="checkbox" value="16">DEPT14  --- DEPT14 </option>
+
+
+
+                    <option type="checkbox" value="17">DEPT15  --- DEPT15 </option>
+
+
+
+                    <option type="checkbox" value="18">DEPT16  --- DEPT16 </option>
+
+
+
+                    <option type="checkbox" value="19">DEPT17  --- DEPT17 </option>
+
+
+
+                    <option type="checkbox" value="20">DEPT18  --- DEPT18 </option>
+
+
+
+                    <option type="checkbox" value="21">DEPT19  --- DEPT19 </option>
+
+
+
+                    <option type="checkbox" value="22">DEPT20  --- DEPT20 </option>
+
+
+
+                    <option type="checkbox" value="23">DEPT21  --- DEPT21 </option>
+
+
+
+                    <option type="checkbox" value="24">DEPT22  --- DEPT22 </option>
+
+
+
+                    <option type="checkbox" value="25">DEPT23  --- DEPT23 </option>
+
+
+
+                    <option type="checkbox" value="26">DEPT24  --- DEPT24 </option>
+
+
+
+                    <option type="checkbox" selected value="27">DEPT25  --- DEPT25 </option>
+
+
+
+                    <option type="checkbox" value="28">DEPT26  --- DEPT26 </option>
+
+
+
+                    <option type="checkbox" value="29">DEPT27  --- DEPT27 </option>
+
+
+
+                    <option type="checkbox" value="30">DEPT28  --- DEPT28 </option>
+
+
+
+                    <option type="checkbox" value="31">DEPT29  --- DEPT29 </option>
+
+
+
+                    <option type="checkbox" selected value="32">DEPT30  --- DEPT30 </option>
+
+
+
+                    <option type="checkbox" value="33">DEPT31  --- DEPT31 </option>
+
+
+
+                    <option type="checkbox" value="34">DEPT32  --- DEPT32 </option>
+
+
+
+                    <option type="checkbox" value="35">DEPT33  --- DEPT33 </option>
+
+
+
+                    <option type="checkbox" value="36">DEPT34  --- DEPT34 </option>
+
+
+
+                    <option type="checkbox" value="37">DEPT35  --- DEPT35 </option>
+
+
+
+                    <option type="checkbox" value="38">DEPT36  --- DEPT36 </option>
+
+
+
+                    <option type="checkbox" value="39">DEPT37  --- DEPT37 </option>
+
+
+
+                    <option type="checkbox" value="40">DEPT38  --- DEPT38 </option>
+
+
+
+                    <option type="checkbox" value="41">DEPT39  --- DEPT39 </option>
+
+
+
+                    <option type="checkbox" value="42">DEPT40  --- DEPT40 </option>
+
+
+
+                    <option type="checkbox" value="43">DEPT41  --- DEPT41 </option>
+
+
+
+                    <option type="checkbox" value="44">DEPT42  --- DEPT42 </option>
+
+
+
+                    <option type="checkbox" value="45">DEPT43  --- DEPT43 </option>
+
+
+
+                    <option type="checkbox" value="46">DEPT44  --- DEPT44 </option>
+
+
+
+                    <option type="checkbox" value="47">DEPT45  --- DEPT45 </option>
+
+
+
+                    <option type="checkbox" value="48">DEPT46  --- DEPT46 </option>
+
+
+
+                    <option type="checkbox" value="49">DEPT47  --- DEPT47 </option>
+
+
+
+                    <option type="checkbox" value="50">DEPT48  --- DEPT48 </option>
+
+
+
+                    <option type="checkbox" value="51">DEPT49  --- DEPT49 </option>
+
+
+
+                    <option type="checkbox" value="52">DEPT50  --- DEPT50 </option>
+
+
+
+                    <option type="checkbox" value="53">DEPT51  --- DEPT51 </option>
+
+
+
+                    <option type="checkbox" value="54">DEPT52  --- DEPT52 </option>
+
+
+
+                    <option type="checkbox" value="55">DEPT53  --- DEPT53 </option>
+
+
+
+                    <option type="checkbox" value="56">DEPT54  --- DEPT54 </option>
+
+
+
+                    <option type="checkbox" value="57">DEPT55  --- DEPT55 </option>
+
+
+
+                    <option type="checkbox" value="58">DEPT56  --- DEPT56 </option>
+
+
+
+                    <option type="checkbox" value="59">DEPT57  --- DEPT57 </option>
+
+
+
+                    <option type="checkbox" value="60">DEPT58  --- DEPT58 </option>
+
+
+
+                    <option type="checkbox" value="61">DEPT59  --- DEPT59 </option>
+
+
+
+                    <option type="checkbox" value="62">DEPT60  --- DEPT60 </option>
+
+
+
+                    <option type="checkbox" value="63">DEPT61  --- DEPT61 </option>
+
+
+
+                    <option type="checkbox" value="64">DEPT62  --- DEPT62 </option>
+
+
+
+                    <option type="checkbox" value="65">DEPT63  --- DEPT63 </option>
+
+
+
+                    <option type="checkbox" value="66">DEPT64  --- DEPT64 </option>
+
+
+
+                    <option type="checkbox" value="67">DEPT65  --- DEPT65 </option>
+
+
+
+                    <option type="checkbox" value="68">DEPT66  --- DEPT66 </option>
+
+
+
+                    <option type="checkbox" value="69">DEPT67  --- DEPT67 </option>
+
+
+
+                    <option type="checkbox" value="70">DEPT68  --- DEPT68 </option>
+
+
+
+                    <option type="checkbox" value="71">DEPT69  --- DEPT69 </option>
+
+
+
+                    <option type="checkbox" value="72">DEPT70  --- DEPT70 </option>
+
+
+
+                    <option type="checkbox" value="73">DEPT71  --- DEPT71 </option>
+
+
+
+                    <option type="checkbox" value="74">DEPT72  --- DEPT72 </option>
+
+
+
+                    <option type="checkbox" value="75">DEPT73  --- DEPT73 </option>
+
+
+
+                    <option type="checkbox" value="76">DEPT74  --- DEPT74 </option>
+
+
+
+                    <option type="checkbox" value="77">DEPT75  --- DEPT75 </option>
+
+
+
+                    <option type="checkbox" value="78">DEPT76  --- DEPT76 </option>
+
+
+
+                    <option type="checkbox" value="79">DEPT77  --- DEPT77 </option>
+
+
+
+                    <option type="checkbox" value="80">DEPT78  --- DEPT78 </option>
+
+
+
+                    <option type="checkbox" value="81">DEPT79  --- DEPT79 </option>
+
+
+
+                    <option type="checkbox" value="82">DEPT80  --- DEPT80 </option>
+
+
+
+                    <option type="checkbox" value="83">DEPT81  --- DEPT81 </option>
+
+
+
+                    <option type="checkbox" value="84">DEPT82  --- DEPT82 </option>
+
+
+
+                    <option type="checkbox" value="85">DEPT83  --- DEPT83 </option>
+
+
+
+                    <option type="checkbox" value="86">DEPT84  --- DEPT84 </option>
+
+
+
+                    <option type="checkbox" value="87">DEPT85  --- DEPT85 </option>
+
+
+
+                    <option type="checkbox" value="88">DEPT86  --- DEPT86 </option>
+
+
+
+                    <option type="checkbox" value="89">DEPT87  --- DEPT87 </option>
+
+
+
+                    <option type="checkbox" value="90">DEPT88  --- DEPT88 </option>
+
+
+
+                    <option type="checkbox" value="91">DEPT89  --- DEPT89 </option>
+
+
+
+                    <option type="checkbox" value="92">DEPT90  --- DEPT90 </option>
+
+
+
+                    <option type="checkbox" value="93">DEPT91  --- DEPT91 </option>
+
+
+
+                    <option type="checkbox" value="94">DEPT92  --- DEPT92 </option>
+
+
+
+                    <option type="checkbox" value="95">DEPT93  --- DEPT93 </option>
+
+
+
+                    <option type="checkbox" value="96">DEPT94  --- DEPT94 </option>
+
+
+
+                    <option type="checkbox" value="97">DEPT95  --- DEPT95 </option>
+
+
+
+                    <option type="checkbox" value="98">DEPT96  --- DEPT96 </option>
+
+
+
+                    <option type="checkbox" value="99">DEPT97  --- DEPT97 </option>
+
+
+
+                    <option type="checkbox" value="100">DEPT98  --- DEPT98 </option>
+
+
+
+                    <option type="checkbox" value="101">DEPT99  --- DEPT99 </option>
+
+
+
+                    <option type="checkbox" value="102">Tiger Group </option>
+
+
+
+                    <option type="checkbox" value="103">aaaa  --- aaa </option>
+
+
+                </select>
+            </div>
+        </div>
+
+
+
+
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+            <label for="j_group" class="col-lg-2 control-label"> 所属主机组</label>
+            <div class="col-sm-8">
+                <select id="j_group" name="j_group" class="form-control m-b" multiple size="10">
+
+
+                    <option type="checkbox" value="2">AssetGroup1  --- AssetGroup1 </option>
+
+
+
+                    <option type="checkbox" value="4">AssetGroup3  --- AssetGroup3 </option>
+
+
+
+                    <option type="checkbox" value="5">AssetGroup4  --- AssetGroup4 </option>
+
+
+
+                    <option type="checkbox" value="6">AssetGroup5  --- AssetGroup5 </option>
+
+
+
+                    <option type="checkbox" value="7" selected>AssetGroup6  --- AssetGroup6 </option>
+
+
+
+                    <option type="checkbox" value="8">AssetGroup7  --- AssetGroup7 </option>
+
+
+
+                    <option type="checkbox" value="9">AssetGroup8  --- AssetGroup8 </option>
+
+
+
+                    <option type="checkbox" value="10">AssetGroup9  --- AssetGroup9 </option>
+
+
+
+                    <option type="checkbox" value="11" selected>AssetGroup10  --- AssetGroup10 </option>
+
+
+
+                    <option type="checkbox" value="12">AssetGroup11  --- AssetGroup11 </option>
+
+
+
+                    <option type="checkbox" value="13">AssetGroup12  --- AssetGroup12 </option>
+
+
+
+                    <option type="checkbox" value="14">AssetGroup13  --- AssetGroup13 </option>
+
+
+
+                    <option type="checkbox" value="15">AssetGroup14  --- AssetGroup14 </option>
+
+
+
+                    <option type="checkbox" value="16">AssetGroup15  --- AssetGroup15 </option>
+
+
+
+                    <option type="checkbox" value="17">AssetGroup16  --- AssetGroup16 </option>
+
+
+
+                    <option type="checkbox" value="18">AssetGroup17  --- AssetGroup17 </option>
+
+
+
+                    <option type="checkbox" value="19">AssetGroup18  --- AssetGroup18 </option>
+
+
+
+                    <option type="checkbox" value="20">AssetGroup19  --- AssetGroup19 </option>
+
+
+                </select>
+            </div>
+        </div>
+
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"> 是否激活<span class="red-fonts">*</span> </label>
+            <div class="col-sm-8">
+
+
+                <div class="radio i-checks"><label> <input type="radio" value="0" name="j_active"> <i> 禁用 </i></label></div>
+
+
+
+                <div class="radio i-checks"><label> <input type="radio" checked value="1" name="j_active"> <i> 激活 </i></label></div>
+
+
+            </div>
+        </div>
+
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"> 备注 </label>
+            <div class="col-sm-8"><input type="text" placeholder="hadoop01" value="test" name="j_comment" class="form-control"></div>
+        </div>
+
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+            <div class="col-sm-4 col-sm-offset-5">
+                <button class="btn btn-white" type="submit"> 重置 </button>
+                <button class="btn btn-primary" type="submit" style="display: i"> 提交 </button>
+            </div>
+        </div>
+    </form>
+</body>
+</html>
