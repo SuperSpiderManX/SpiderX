@@ -94,7 +94,6 @@ def assetList(req):
     username = req.COOKIES.get('username','')
     usergroup = User.objects.get(username='xjt').group_set.all()
     allmachine = Group.objects.get(groupname='admin').machine_set.all()
-    
     for i in allmachine:
         appendObj = ServerInfo()
         appendObj.serverName = i.name
@@ -113,7 +112,10 @@ def assetList(req):
 
 
 
+
 def logout(req):
     response = HttpResponse('logout !!')
     response.delete_cookie('username')
     return response
+
+djSet = django.db.models.query.QuerySet()
