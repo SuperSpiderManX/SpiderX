@@ -26,7 +26,6 @@
     
     function loadControl()
     {
-        alert("123")
     }
 
     addLoadEvent(loadControl);
@@ -170,8 +169,9 @@
                     <!--<td class="text-center" id="j_dept_13" name="j_dept" onclick="show_all('dept', '13')">DEPT25 DEPT30</td>-->
                     <td class="text-center" name="j_comment"> {{serverInfo.comment}} </td>
                     <td class="text-center" data-editable='false'>
-                        <a href="SpiderX:sftp://{{serverInfo.user}}:{{serverInfo.password}}@{{serverInfo.ip}}:{{serverInfo.port}}" target="_blank" class="btn btn-xs btn-primary">ssh</a>
-                        <a href="/spider/assetEdit/?id={{serverInfo.serverId}}" target="_blank" class="btn btn-xs btn-info">上传文件</a>
+                        <a href="SpiderX:sftp://{{serverInfo.user}}:{{serverInfo.password}}@{{serverInfo.ip}}:{{serverInfo.port}}" target="_blank" class="btn btn-xs btn-primary">上传文件</a>
+                        <a href="http://192.168.0.15:8000/online/shell/?username={{serverInfo.user}}&password={{serverInfo.password}}&ip={{serverInfo.ip}}&port={{serverInfo.port}}&audit=0" target="_blank" class="btn btn-xs btn-info">ssh</a>
+                        <a href="http://192.168.0.15:8000/online/shell/?username={{serverInfo.user}}&password={{serverInfo.password}}&ip={{serverInfo.ip}}&port={{serverInfo.port}}&audit=1" target="_blank" class="btn btn-xs btn-info">审计</a>
                     </td>
                 </tr>
                 {% endfor %}
