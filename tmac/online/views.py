@@ -118,4 +118,3 @@ def logout(req):
     response.delete_cookie('username')
     return response
 
-djSet = django.db.models.query.QuerySet()

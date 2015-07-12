@@ -26,6 +26,7 @@
     
     function loadControl()
     {
+        alert("123")
     }
 
     addLoadEvent(loadControl);
@@ -169,7 +170,7 @@
                     <!--<td class="text-center" id="j_dept_13" name="j_dept" onclick="show_all('dept', '13')">DEPT25 DEPT30</td>-->
                     <td class="text-center" name="j_comment"> {{serverInfo.comment}} </td>
                     <td class="text-center" data-editable='false'>
-                        <a href="SpiderX:sftp://{{serverInfo.loginuser}}:{{serverInfo.loginpassword}}@{{serverInfo.ip}}:{{serverInfo.port}}" target="_blank" class="btn btn-xs btn-primary">ssh</a>
+                        <a href="SpiderX:sftp://{{serverInfo.user}}:{{serverInfo.password}}@{{serverInfo.ip}}:{{serverInfo.port}}" target="_blank" class="btn btn-xs btn-primary">ssh</a>
                         <a href="/spider/assetEdit/?id={{serverInfo.serverId}}" target="_blank" class="btn btn-xs btn-info">上传文件</a>
                     </td>
                 </tr>
